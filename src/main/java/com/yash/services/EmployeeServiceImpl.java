@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yash.entities.Employee;
+import com.yash.exceptions.EmployeeNotFoundException;
 import com.yash.repositories.EmployeeRepository;
 
 @Service
@@ -22,7 +23,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee getEmployeeById(int employeeId) {
-		Employee employee = repo.findById(employeeId).get();		
+		if(repo.findById(employeeId).isEmpty()) {
+			throw new EmployeeNotFoundException("Employee not found with id : " + employeeId);
+		}
+
+		Employee employee = repo.findById(employeeId).get();
 		
 		return employee;
 	}
